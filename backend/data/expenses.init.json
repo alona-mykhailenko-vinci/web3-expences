@@ -1,0 +1,9 @@
+[
+  { "id": "1", "date": "2025-01-16", "description": "Example expense #1 from Alice", "payer": "Alice", "amount": 25.5 },
+  { "id": "2", "date": "2025-01-15", "description": "Example expense #2 from Bob", "payer": "Bob", "amount": 35 },
+  { "id": "3", "date": "2025-01-15", "description": "Example expense #3 from Alice", "payer": "Alice", "amount": 2 },
+  { "id": "4", "date": "2025-01-17", "description": "Groceries for the week", "payer": "Alice", "amount": 85.5 },
+  { "id": "5", "date": "2025-01-16", "description": "Movie tickets", "payer": "Bob", "amount": 24.0 },
+  { "id": "6", "date": "2025-01-18", "description": "Dinner at restaurant", "payer": "Charlie", "amount": 65.75 },
+  { "id": "7", "date": "2025-01-19", "description": "Gas for road trip", "payer": "Alice", "amount": 42.3 }
+]
