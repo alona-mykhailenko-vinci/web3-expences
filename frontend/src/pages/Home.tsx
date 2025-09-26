@@ -1,5 +1,5 @@
-// pages/Home.tsx
-import React, { useState, useEffect } from 'react';
+
+import  { useState, useEffect } from 'react';
 import {
   Box,
   Container,
@@ -16,19 +16,13 @@ import type { Expense,ExpenseInput } from '../types/Expense';
 
 const host = import.meta.env.VITE_API_URL;
 
-console.log('\ud83c\udf10 Frontend Environment:', {
-  VITE_API_URL: import.meta.env.VITE_API_URL,
-  host,
-  NODE_ENV: import.meta.env.NODE_ENV
-});
-
-const Home: React.FC = () => {
-    const [sortingAlgo, setSortingAlgo] = useState<(_a: Expense, _b: Expense) => number>(() => () => 0);
+export default function Home() {
+  const [sortingAlgo, setSortingAlgo] = useState<(_a: Expense, _b: Expense) => number>(() => () => 0);
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
- const sendApiRequestandHandleError = async (method: string = 'GET', path: string, body?: unknown) => {
+  const sendApiRequestandHandleError = async (method: string = 'GET', path: string, body?: unknown) => {
     try {
       const response = await fetch(`${host}/api/${path}`, {
         method: method,
@@ -51,7 +45,8 @@ const Home: React.FC = () => {
     try {
       setLoading(true);
       const data = await sendApiRequestandHandleError('GET', 'expenses');
-      setExpenses(data);
+      // Ensure data is an array before setting state
+      setExpenses(Array.isArray(data) ? data : []);
       setError(null);
     } finally {
       setLoading(false);
@@ -62,13 +57,16 @@ const Home: React.FC = () => {
     fetchExpenses();
   }, []);
 
-const handleAddExpense = async (newExpenseForm: ExpenseInput) => {
+  const handleAddExpense = async (newExpenseForm: ExpenseInput) => {
     const newExpenseOptimistic = { id: 'optimistic', ...newExpenseForm } as Expense; // We add a temporary id -1 for React key, it will be replaced when we get the real added expense from backend
-    const newExpensesOptimistic = [newExpenseOptimistic, ...expenses]; // Optimistically update the state, whatever the sort method, add on top
+    const currentExpenses = Array.isArray(expenses) ? expenses : [];
+    const newExpensesOptimistic = [newExpenseOptimistic, ...currentExpenses]; // Optimistically update the state, whatever the sort method, add on top
     setExpenses(newExpensesOptimistic);
     const addedExpense = await sendApiRequestandHandleError('POST', 'expenses', newExpenseForm);
-    const newExpensesActual = [addedExpense, ...expenses]; // Now that we have the actual added expense with id from backend, let's use it instead of the optimistically added one
-    setExpenses(newExpensesActual);
+    if (addedExpense) {
+      const newExpensesActual = [addedExpense, ...currentExpenses]; // Now that we have the actual added expense with id from backend, let's use it instead of the optimistically added one
+      setExpenses(newExpensesActual);
+    }
   };
 
   const handleResetData = async () => {
@@ -76,7 +74,8 @@ const handleAddExpense = async (newExpenseForm: ExpenseInput) => {
     setLoading(true);
 
     const resetData = await sendApiRequestandHandleError('POST', 'expenses/reset');
-    setExpenses(resetData.data);
+    // Ensure resetData.data is an array before setting state
+    setExpenses(Array.isArray(resetData?.data) ? resetData.data : []);
     setLoading(false);
   };
 
@@ -84,11 +83,13 @@ const handleAddExpense = async (newExpenseForm: ExpenseInput) => {
     setSortingAlgo(() => algo); // Pay attention here, we're wrapping algo in a function because useState setter accept either a value or a function returning a value.
   };
 
-  const sortedExpenses = expenses.sort(sortingAlgo);
+  // Create a safe sorted copy of expenses array
+  const sortedExpenses = Array.isArray(expenses) ? [...expenses].sort(sortingAlgo) : [];
 
   if (loading) {
     return <div>Loading expenses...</div>;
   }
+
 
   return (
     <Box
@@ -192,6 +193,4 @@ const handleAddExpense = async (newExpenseForm: ExpenseInput) => {
       </Container>
     </Box>
   );
-};
-
-export default Home;
+}

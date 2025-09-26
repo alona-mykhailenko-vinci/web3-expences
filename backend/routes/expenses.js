@@ -1,104 +1,41 @@
 const express = require('express');
 const router = express.Router();
-const expensesService = require('../services/expenses');
+const expensesService = require('../services/expenses.js');
 
-/**
- * GET /expenses
- * Returns all expenses from the JSON file
- */
-router.get('/', (req, res) => {
-  console.log('📥 GET /expenses - Request received');
-  console.log('🔍 Request headers:', req.headers);
-  
+router.get('/', async (req, res) => {
   try {
-    console.log('📂 Calling expensesService.getAllExpenses()');
-    const expenses = expensesService.getAllExpenses();
-    console.log('✅ Successfully fetched expenses:', {
-      count: expenses.length,
-      first: expenses[0] || 'No expenses'
-    });
+    const expenses = await expensesService.getAllExpenses();
     res.json(expenses);
   } catch (error) {
-    console.error('❌ Error fetching expenses:', error);
-    console.error('🔥 Error stack:', error.stack);
-    res.status(500).json({ error: 'Failed to fetch expenses' });
+    console.error('Error retrieving expenses:', error);
+    res.status(500).json({ error: 'Failed to retrieve expenses' });
   }
 });
 
-/**
- * POST /expenses
- * Adds a new expense to the JSON file
- * Expected body: { date, description, payer, amount }
- */
-router.post('/', (req, res) => {
-  console.log('📤 POST /expenses - Request received');
-  console.log('📋 Request body:', req.body);
-  console.log('🔍 Request headers:', req.headers);
-  
+router.post('/', async (req, res) => {
   try {
-    const { date, description, payer, amount } = req.body;
-    console.log('🔍 Extracted fields:', { date, description, payer, amount });
-    
-    // Validate required fields
-    if (!date || !description || !payer || amount === undefined) {
-      console.log('❌ Validation failed: Missing required fields');
-      return res.status(400).json({ 
-        error: 'Missing required fields: date, description, payer, amount' 
-      });
-    }
-
-    // Validate amount is a number
-    if (typeof amount !== 'number' || isNaN(amount)) {
-      return res.status(400).json({ 
-        error: 'Amount must be a valid number' 
-      });
-    }
-
-    // Validate date format (basic check)
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!dateRegex.test(date)) {
-      return res.status(400).json({ 
-        error: 'Date must be in YYYY-MM-DD format' 
-      });
-    }
-
-    const expenseData = {
-      date,
-      description,
-      payer,
-      amount: Number(amount)
+    const newExpense = {
+      date: req.body.date,
+      description: req.body.description,
+      payer: req.body.payer,
+      amount: parseFloat(req.body.amount),
     };
 
-    const newExpense = expensesService.addExpense(expenseData);
-    
-    if (newExpense) {
-      res.status(201).json(newExpense);
-    } else {
-      res.status(500).json({ error: 'Failed to add expense' });
-    }
+    const addedExpense = await expensesService.addExpense(newExpense);
+    res.status(201).json(addedExpense);
   } catch (error) {
     console.error('Error adding expense:', error);
     res.status(500).json({ error: 'Failed to add expense' });
   }
 });
 
-/**
- * POST /expenses/reset
- * Resets expenses to initial state from expenses.init.json
- */
-router.post('/reset', (req, res) => {
+router.post('/reset', async (req, res) => {
   try {
-    const resetData = expensesService.resetExpenses();
-    
-    if (resetData) {
-      res.json({
-        message: 'Expenses successfully reset to initial state',
-        expenses: resetData,
-        count: resetData.length
-      });
-    } else {
-      res.status(500).json({ error: 'Failed to reset expenses' });
-    }
+    const resetData = await expensesService.resetExpenses();
+    res.json({
+      message: 'Expenses reset successfully',
+      data: resetData,
+    });
   } catch (error) {
     console.error('Error resetting expenses:', error);
     res.status(500).json({ error: 'Failed to reset expenses' });
