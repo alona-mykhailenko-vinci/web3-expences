@@ -9,7 +9,6 @@ import {
   CircularProgress,
   Alert,
   Snackbar,
-  Divider,
 } from '@mui/material';
 import ExpenseItem from '../components/ExpenseItem';
 import ExpenseAdd from '../components/ExpenseAdd';
