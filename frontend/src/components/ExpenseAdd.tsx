@@ -1,73 +1,144 @@
-import React from 'react';
-import { Button } from '@mui/material';
-import type { Expense } from '../types/Expense';
+import { useForm } from 'react-hook-form';
+import { 
+  Box, 
+  TextField, 
+  Select, 
+  MenuItem, 
+  FormControl, 
+  InputLabel, 
+  Button, 
+  Stack,
+  Typography
+} from '@mui/material';
+import type { ExpenseInput } from '../types/Expense';
 
 interface ExpenseAddProps {
-  handleAdd: (expense: Omit<Expense, 'id'>) => void;
+  addExpense: (expense: ExpenseInput) => void;
 }
 
-const ExpenseAdd: React.FC<ExpenseAddProps> = ({ handleAdd }) => {
-  const onAdd = () => {
-    // Generate random payer between Alice, Bob, and Charlie
-    const payers = ['Alice', 'Bob', 'Charlie'];
-    const randomPayer = payers[Math.floor(Math.random() * payers.length)];
-    
-    // Generate random amount between 5 and 200 with max 2 decimal places
-    const randomAmount = Math.round((Math.random() * 195 + 5) * 100) / 100;
-    
-    // Generate current date in YYYY-MM-DD format
-    const currentDate = new Date().toISOString().split('T')[0];
-    
-    // Generate random expense descriptions
-    const descriptions = [
-      'Random grocery shopping',
-      'Coffee and pastries',
-      'Gas station fill-up',
-      'Restaurant dinner',
-      'Movie theater tickets',
-      'Online shopping',
-      'Pharmacy supplies',
-      'Book store purchase',
-      'Hardware store items',
-      'Food delivery order'
-    ];
-    const randomDescription = descriptions[Math.floor(Math.random() * descriptions.length)];
-    
-    // Create new expense (without id - backend will generate it)
-    const newExpense: Omit<Expense, 'id'> = {
-      date: currentDate,
-      description: randomDescription,
-      payer: randomPayer,
-      amount: randomAmount
-    };
-    
-    // Call the parent's handleAdd function
-    handleAdd(newExpense);
+interface FormData {
+  description: string;
+  payer: string;
+  amount: string;
+}
+
+export default function ExpenseAdd({ addExpense }: ExpenseAddProps) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset
+  } = useForm<FormData>({
+    defaultValues: {
+      description: '',
+      payer: 'Alice',
+      amount: ''
+    }
+  });
+
+  const onSubmit = ({ description, payer, amount }: FormData) => {
+    addExpense({
+      description,
+      payer,
+      amount: parseFloat(amount),
+      date: new Date().toISOString(),
+    });
+    reset(); // Reset form after submission
   };
 
   return (
-    <Button 
-      variant="contained"
-      color="primary"
-      onClick={onAdd}
+    <Box
+      component="form"
+      onSubmit={handleSubmit(onSubmit)}
       sx={{
-        px: 3,
-        py: 1.5,
-        fontSize: '1rem',
-        fontWeight: 600,
-        textTransform: 'none',
-        borderRadius: 1.5,
-        boxShadow: 1,
+        width: '100%',
+        border: '1px solid',
+        borderColor: 'divider',
+        borderRadius: 2,
+        px: 2,
+        py: 2,
+        bgcolor: 'background.paper',
+        transition: 'border-color .2s ease, transform .2s ease',
         '&:hover': {
-          boxShadow: 2,
+          borderColor: 'text.primary',
           transform: 'translateY(-1px)',
         },
-        transition: 'all 0.2s ease',
+        mb: 2
       }}
     >
-      Add
-    </Button>
-  );
-};
+      <Typography
+        variant="subtitle1"
+        component="h3"
+        sx={{
+          fontWeight: 600,
+          color: 'text.primary',
+          mb: 2,
+        }}
+      >
+        Add New Expense
+      </Typography>
 
-export default ExpenseAdd;
+      <Stack spacing={2}>
+        <TextField
+          fullWidth
+          size="small"
+          label="Description"
+          placeholder="Enter expense description"
+          error={!!errors.description}
+          helperText={errors.description?.message}
+          {...register('description', { required: 'Description is required' })}
+        />
+
+        <FormControl fullWidth size="small" error={!!errors.payer}>
+          <InputLabel id="payer-select-label">Payer</InputLabel>
+          <Select
+            labelId="payer-select-label"
+            label="Payer"
+            defaultValue="Alice"
+            {...register('payer', { required: 'Payer is required' })}
+          >
+            <MenuItem value="Alice">Alice</MenuItem>
+            <MenuItem value="Bob">Bob</MenuItem>
+          </Select>
+          {errors.payer && (
+            <Typography variant="caption" color="error" sx={{ mt: 0.5 }}>
+              {errors.payer.message}
+            </Typography>
+          )}
+        </FormControl>
+
+        <TextField
+          fullWidth
+          size="small"
+          type="number"
+          label="Amount"
+          placeholder="0.00"
+          error={!!errors.amount}
+          helperText={errors.amount?.message}
+          inputProps={{
+            step: "0.01",
+            min: "0"
+          }}
+          {...register('amount', { 
+            required: 'Amount is required',
+            min: { value: 0.01, message: 'Amount must be greater than 0' }
+          })}
+        />
+
+        <Button 
+          type="submit"
+          variant="contained"
+          color="primary"
+          sx={{
+            textTransform: 'none',
+            borderRadius: 2,
+            px: 2.5,
+            fontWeight: 600
+          }}
+        >
+          Add Expense
+        </Button>
+      </Stack>
+    </Box>
+  );
+}

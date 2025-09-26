@@ -114,15 +114,18 @@ export default function Home() {
             Expense Tracker
           </Typography>
 
-          {/* Actions */}
+          {/* Add Expense Form */}
+          <Box sx={{ mb: 2 }}>
+            <ExpenseAdd addExpense={handleAddExpense}/>
+          </Box>
+
+          {/* Reset Data Button */}
           <Stack
             direction="row"
             justifyContent="center"
             alignItems="center"
-            spacing={1.5}
-            sx={{ mb: 2 }}
+            sx={{ mb: 4 }}
           >
-            <ExpenseAdd handleAdd={handleAddExpense} />
             <Button
               variant="outlined"
               color="secondary"
