@@ -8,41 +8,51 @@ import {
   Button,
   CircularProgress,
   Alert,
-  Snackbar,
 } from '@mui/material';
 import ExpenseItem from '../components/ExpenseItem';
 import ExpenseAdd from '../components/ExpenseAdd';
-import type { Expense } from '../types/Expense';
+import ExpenseSorter from '../components/ExpenseSorter';
+import type { Expense,ExpenseInput } from '../types/Expense';
 
-const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
+const host = import.meta.env.VITE_API_URL;
+
+console.log('\ud83c\udf10 Frontend Environment:', {
+  VITE_API_URL: import.meta.env.VITE_API_URL,
+  host,
+  NODE_ENV: import.meta.env.NODE_ENV
+});
 
 const Home: React.FC = () => {
+    const [sortingAlgo, setSortingAlgo] = useState<(_a: Expense, _b: Expense) => number>(() => () => 0);
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [resetLoading, setResetLoading] = useState(false);
-  const [snackbar, setSnackbar] = useState<{
-    open: boolean;
-    message: string;
-    severity: 'success' | 'error';
-  }>({
-    open: false,
-    message: '',
-    severity: 'success',
-  });
 
+ const sendApiRequestandHandleError = async (method: string = 'GET', path: string, body?: unknown) => {
+    try {
+      const response = await fetch(`${host}/api/${path}`, {
+        method: method,
+        headers: body ? { 'Content-Type': 'application/json' } : {},
+        body: body ? JSON.stringify(body) : null,
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('API request failed:', error);
+      setError(error instanceof Error ? error.message : 'An error occurred');
+    }
+  };
+
+  // Fetch expenses from backend
   const fetchExpenses = async () => {
     try {
       setLoading(true);
-      setError(null);
-      const response = await fetch(`${API_BASE_URL}/expenses`);
-      if (!response.ok) throw new Error(`Failed to fetch expenses: ${response.statusText}`);
-      const data = await response.json();
+      const data = await sendApiRequestandHandleError('GET', 'expenses');
       setExpenses(data);
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to load expenses';
-      setError(errorMessage);
-      console.error('Error fetching expenses:', err);
+      setError(null);
     } finally {
       setLoading(false);
     }
@@ -52,40 +62,33 @@ const Home: React.FC = () => {
     fetchExpenses();
   }, []);
 
-  const handleAdd = async (newExpense: Omit<Expense, 'id'>) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/expenses`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newExpense),
-      });
-      if (!response.ok) throw new Error(`Failed to add expense: ${response.statusText}`);
-      await fetchExpenses();
-      setSnackbar({ open: true, message: 'Expense added successfully!', severity: 'success' });
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to add expense';
-      setSnackbar({ open: true, message: errorMessage, severity: 'error' });
-      console.error('Error adding expense:', err);
-    }
+const handleAddExpense = async (newExpenseForm: ExpenseInput) => {
+    const newExpenseOptimistic = { id: 'optimistic', ...newExpenseForm } as Expense; // We add a temporary id -1 for React key, it will be replaced when we get the real added expense from backend
+    const newExpensesOptimistic = [newExpenseOptimistic, ...expenses]; // Optimistically update the state, whatever the sort method, add on top
+    setExpenses(newExpensesOptimistic);
+    const addedExpense = await sendApiRequestandHandleError('POST', 'expenses', newExpenseForm);
+    const newExpensesActual = [addedExpense, ...expenses]; // Now that we have the actual added expense with id from backend, let's use it instead of the optimistically added one
+    setExpenses(newExpensesActual);
   };
 
-  const handleReset = async () => {
-    try {
-      setResetLoading(true);
-      const response = await fetch(`${API_BASE_URL}/expenses/reset`, { method: 'POST' });
-      if (!response.ok) throw new Error(`Failed to reset expenses: ${response.statusText}`);
-      await fetchExpenses();
-      setSnackbar({ open: true, message: 'Data reset to initial state successfully!', severity: 'success' });
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to reset data';
-      setSnackbar({ open: true, message: errorMessage, severity: 'error' });
-      console.error('Error resetting expenses:', err);
-    } finally {
-      setResetLoading(false);
-    }
+  const handleResetData = async () => {
+    setExpenses([]); // Clear current expenses optimistically
+    setLoading(true);
+
+    const resetData = await sendApiRequestandHandleError('POST', 'expenses/reset');
+    setExpenses(resetData.data);
+    setLoading(false);
   };
 
-  const handleSnackbarClose = () => setSnackbar({ ...snackbar, open: false });
+  const handleAlgoChange = (algo: (a: Expense, b: Expense) => number) => {
+    setSortingAlgo(() => algo); // Pay attention here, we're wrapping algo in a function because useState setter accept either a value or a function returning a value.
+  };
+
+  const sortedExpenses = expenses.sort(sortingAlgo);
+
+  if (loading) {
+    return <div>Loading expenses...</div>;
+  }
 
   return (
     <Box
@@ -118,17 +121,32 @@ const Home: React.FC = () => {
             spacing={1.5}
             sx={{ mb: 2 }}
           >
-            <ExpenseAdd handleAdd={handleAdd} />
+            <ExpenseAdd handleAdd={handleAddExpense} />
             <Button
               variant="outlined"
               color="secondary"
-              onClick={handleReset}
-              disabled={resetLoading}
+              onClick={handleResetData}
+              disabled={loading}
               sx={{ textTransform: 'none', borderRadius: 2, px: 2.5 }}
             >
-              {resetLoading ? <CircularProgress size={18} /> : 'Reset Data'}
+              {loading ? <CircularProgress size={18} /> : 'Reset Data'}
             </Button>
           </Stack>
+
+          {/* Expense Counter and Sorter */}
+          {!loading && !error && expenses.length > 0 && (
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+              sx={{ mb: 2, px: 1 }}
+            >
+              <Typography variant="h6" color="text.secondary">
+                Expenses ({expenses.length})
+              </Typography>
+              <ExpenseSorter setSortingAlgo={handleAlgoChange} />
+            </Stack>
+          )}
 
          
 
@@ -157,12 +175,12 @@ const Home: React.FC = () => {
           {/* Centered, minimalist column */}
           {!loading && !error && (
             <Stack spacing={1.25} sx={{ width: '100%', maxWidth: 560, mx: 'auto' }}>
-              {expenses.length === 0 ? (
+              {sortedExpenses.length === 0 ? (
                 <Typography variant="body1" color="text.secondary" align="center" sx={{ my: 4 }}>
                   No expenses yet. Add your first one!
                 </Typography>
               ) : (
-                expenses.map((expense, index) => (
+                sortedExpenses.map((expense, index) => (
                   <ExpenseItem key={expense.id} expense={expense} index={index} />
                 ))
               )}
@@ -170,17 +188,7 @@ const Home: React.FC = () => {
           )}
         </Box>
 
-        {/* Snackbar */}
-        <Snackbar
-          open={snackbar.open}
-          autoHideDuration={4000}
-          onClose={handleSnackbarClose}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        >
-          <Alert onClose={handleSnackbarClose} severity={snackbar.severity} sx={{ width: '100%' }}>
-            {snackbar.message}
-          </Alert>
-        </Snackbar>
+
       </Container>
     </Box>
   );

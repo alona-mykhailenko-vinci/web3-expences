@@ -6,12 +6,21 @@ const expensesService = require('../services/expenses');
  * GET /expenses
  * Returns all expenses from the JSON file
  */
-router.get('/expenses', (req, res) => {
+router.get('/', (req, res) => {
+  console.log('📥 GET /expenses - Request received');
+  console.log('🔍 Request headers:', req.headers);
+  
   try {
+    console.log('📂 Calling expensesService.getAllExpenses()');
     const expenses = expensesService.getAllExpenses();
+    console.log('✅ Successfully fetched expenses:', {
+      count: expenses.length,
+      first: expenses[0] || 'No expenses'
+    });
     res.json(expenses);
   } catch (error) {
-    console.error('Error fetching expenses:', error);
+    console.error('❌ Error fetching expenses:', error);
+    console.error('🔥 Error stack:', error.stack);
     res.status(500).json({ error: 'Failed to fetch expenses' });
   }
 });
@@ -21,12 +30,18 @@ router.get('/expenses', (req, res) => {
  * Adds a new expense to the JSON file
  * Expected body: { date, description, payer, amount }
  */
-router.post('/expenses', (req, res) => {
+router.post('/', (req, res) => {
+  console.log('📤 POST /expenses - Request received');
+  console.log('📋 Request body:', req.body);
+  console.log('🔍 Request headers:', req.headers);
+  
   try {
     const { date, description, payer, amount } = req.body;
+    console.log('🔍 Extracted fields:', { date, description, payer, amount });
     
     // Validate required fields
     if (!date || !description || !payer || amount === undefined) {
+      console.log('❌ Validation failed: Missing required fields');
       return res.status(400).json({ 
         error: 'Missing required fields: date, description, payer, amount' 
       });
@@ -71,7 +86,7 @@ router.post('/expenses', (req, res) => {
  * POST /expenses/reset
  * Resets expenses to initial state from expenses.init.json
  */
-router.post('/expenses/reset', (req, res) => {
+router.post('/reset', (req, res) => {
   try {
     const resetData = expensesService.resetExpenses();
     

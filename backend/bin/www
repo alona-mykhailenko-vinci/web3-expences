@@ -8,6 +8,9 @@ var app = require('../app');
 var debug = require('debug')('backend:server');
 var http = require('http');
 
+console.log('\ud83c\udf0d Server starting up...');
+console.log('\ud83d\udcc5 Timestamp:', new Date().toISOString());
+
 /**
  * Get port from environment and store in Express.
  */
@@ -28,6 +31,8 @@ var server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
+console.log('\ud83d\ude80 Attempting to start server on port:', port);
 
 /**
  * Normalize a port into a number, string, or false.
@@ -63,9 +68,10 @@ function onError(error) {
     : 'Port ' + port;
 
   // handle specific listen errors with friendly messages
+  console.error('\ud83d\ude28 Server error occurred:', error);
   switch (error.code) {
     case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
+      console.error('\u274c', bind + ' requires elevated privileges');
       process.exit(1);
       break;
     case 'EADDRINUSE':

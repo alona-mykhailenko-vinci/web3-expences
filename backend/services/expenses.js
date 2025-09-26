@@ -9,11 +9,22 @@ const EXPENSES_INIT_FILE = path.join(__dirname, '../data/expenses.init.json');
  * @returns {Array} Array of expense objects
  */
 function getAllExpenses() {
+  console.log('\ud83d\udcc2 Service: getAllExpenses() called');
+  console.log('\ud83d\udcc1 Reading from file:', EXPENSES_FILE);
+  
   try {
     const data = fs.readFileSync(EXPENSES_FILE, 'utf8');
-    return JSON.parse(data);
+    console.log('\ud83d\udcc4 Raw file data length:', data.length);
+    const expenses = JSON.parse(data);
+    console.log('\u2705 Successfully parsed expenses:', expenses.length, 'items');
+    return expenses;
   } catch (error) {
-    console.error('Error reading expenses file:', error);
+    console.error('\u274c Error reading expenses file:', error);
+    console.error('\ud83d\udd25 Error details:', {
+      code: error.code,
+      path: error.path,
+      message: error.message
+    });
     return [];
   }
 }
@@ -24,8 +35,12 @@ function getAllExpenses() {
  * @returns {boolean} True if successful, false otherwise
  */
 function addExpense(expense) {
+  console.log('\ud83c\udd95 Service: addExpense() called with:', expense);
+  
   try {
+    console.log('\ud83d\udccb Getting current expenses...');
     const expenses = getAllExpenses();
+    console.log('\ud83d\udcc8 Current expenses count:', expenses.length);
     
     // Generate a new ID based on the highest existing ID
     const maxId = expenses.length > 0 
