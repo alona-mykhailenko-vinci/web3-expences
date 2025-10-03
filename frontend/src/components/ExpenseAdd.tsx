@@ -19,34 +19,23 @@ interface ExpenseAddProps {
 interface FormData {
   description: string;
   payer: string;
-  amount: string;
+  amount: string; // Will be converted to number in onSubmit
 }
 
 export default function ExpenseAdd({ addExpense }: ExpenseAddProps) {
-  // addExpense will be used later when implementing the actual expense submission
   const {
     register,
     handleSubmit,
-    formState: { errors }
-    // reset - will be used later when implementing addExpense call
-  } = useForm<FormData>({
-    defaultValues: {
-      description: '',
-      payer: 'Alice',
-      amount: ''
-    }
-  });
+    formState: { errors },
+  } = useForm<FormData>();
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
-    // Later this can be changed to:
-    // addExpense({
-    //   description: data.description,
-    //   payer: data.payer,
-    //   amount: parseFloat(data.amount),
-    //   date: new Date().toISOString(),
-    // });
-    // reset(); // Reset form after submission
+  const onSubmit = ({ description, payer, amount }: FormData) => {
+    addExpense({
+      description,
+      payer,
+      amount: parseFloat(amount),
+      date: new Date().toISOString(),
+    });
   };
 
   return (
