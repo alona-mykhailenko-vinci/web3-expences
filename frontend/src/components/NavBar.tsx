@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from 'react-router';
+import { NavLink, useLocation } from 'react-router-dom';
 import {
   NavigationMenu,
   NavigationMenuList,
@@ -10,53 +10,56 @@ export default function NavBar() {
   const location = useLocation();
 
   return (
-    <div className="text-white w-lvw p-4 flex flex-row shadow-lg justify-center" style={{backgroundColor: '#1a2037'}}>
-      <NavigationMenu className="text-white">
-        <NavigationMenuList>
-          <NavigationMenuItem>
-            <NavigationMenuLink
-              asChild
-              className={location.pathname === '/' ? 'font-bold px-8 underline' : 'px-8'}
-              style={{
-                color: '#e4d7bc',
-                backgroundColor: 'transparent'
-              }}
-            >
-              <NavLink to="/">
-                Welcome
-              </NavLink>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuLink
-              asChild
-              className={location.pathname === '/add' ? 'font-bold px-8 underline' : 'px-8'}
-              style={{
-                color: '#e4d7bc',
-                backgroundColor: 'transparent'
-              }}
-            >
-              <NavLink to="/add">
-                Add Expense
-              </NavLink>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuLink
-              asChild
-              className={location.pathname === '/list' ? 'font-bold px-8 underline' : 'px-8'}
-              style={{
-                color: '#e4d7bc',
-                backgroundColor: 'transparent'
-              }}
-            >
-              <NavLink to="/list">
-                Expense List
-              </NavLink>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu>
-    </div>
+    <nav className="w-full sticky top-0 z-50 backdrop-blur-md shadow-xl border-b border-white/10" 
+         style={{backgroundColor: 'rgba(26, 32, 55, 0.95)'}}>
+      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-center">
+        <NavigationMenu className="text-white">
+          <NavigationMenuList className="flex space-x-2">
+            <NavigationMenuItem>
+              <NavigationMenuLink
+                asChild
+                className={`px-6 py-3 rounded-lg transition-all duration-300 hover:bg-white/10 ${location.pathname === '/' ? 'font-bold underline underline-offset-4' : ''}`}
+                style={{
+                  color: '#e4d7bc',
+                  backgroundColor: 'transparent'
+                }}
+              >
+                <NavLink to="/">
+                  Welcome
+                </NavLink>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink
+                asChild
+                className={`px-6 py-3 rounded-lg transition-all duration-300 hover:bg-white/10 ${location.pathname === '/add' ? 'font-bold underline underline-offset-4' : ''}`}
+                style={{
+                  color: '#e4d7bc',
+                  backgroundColor: 'transparent'
+                }}
+              >
+                <NavLink to="/add">
+                  Add Expense
+                </NavLink>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink
+                asChild
+                className={`px-6 py-3 rounded-lg transition-all duration-300 hover:bg-white/10 ${location.pathname === '/list' ? 'font-bold underline underline-offset-4' : ''}`}
+                style={{
+                  color: '#e4d7bc',
+                  backgroundColor: 'transparent'
+                }}
+              >
+                <NavLink to="/list">
+                  Expense List
+                </NavLink>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+      </div>
+    </nav>
   );
 }

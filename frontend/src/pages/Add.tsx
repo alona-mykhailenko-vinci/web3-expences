@@ -49,11 +49,20 @@ export default function Add() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-160px)] py-8">
-      <div className="max-w-2xl mx-auto space-y-8">
-        <h1 className="text-4xl font-bold text-center mb-8" style={{ color: '#1a2037' }}>
-          Add New Expense
-        </h1>
+    <div className="min-h-[calc(100vh-160px)] py-12 relative overflow-hidden">
+      {/* Background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-blue-50 opacity-60"></div>
+      
+      <div className="max-w-3xl mx-auto space-y-12 relative z-10">
+        <div className="text-center space-y-4">
+          <h1 className="text-5xl font-bold mb-4" style={{ color: '#1a2037' }}>
+            Add New Expense
+          </h1>
+          <div className="w-24 h-1 mx-auto rounded-full" style={{ backgroundColor: '#e4d7bc' }}></div>
+          <p className="text-lg opacity-70 mt-4" style={{ color: '#6b7280' }}>
+            Track your spending with ease
+          </p>
+        </div>
 
         {/* Success Message */}
         {success && (
@@ -65,7 +74,7 @@ export default function Add() {
         {/* Error Message */}
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6">
-            {error}
+            Error: {error}
           </div>
         )}
 
@@ -75,11 +84,15 @@ export default function Add() {
         </div>
 
         {/* Navigation Options */}
-        <div className="flex flex-row justify-center items-center mt-8">
+        <div className="flex flex-row justify-center items-center mt-12">
             <button
               onClick={() => navigate('/list')}
-              className="font-bold text-lg py-4 px-6 rounded-lg hover:shadow-lg transform hover:scale-105 transition-all duration-200"
-              style={{ backgroundColor: '#1a2037', color: '#e4d7bc' }}
+              className="font-bold text-lg py-4 px-8 rounded-xl hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+              style={{ 
+                backgroundColor: '#1a2037', 
+                color: '#e4d7bc',
+                boxShadow: '0 10px 25px -5px rgba(26, 32, 55, 0.2)'
+              }}
             >
               View All Expenses
             </button>
