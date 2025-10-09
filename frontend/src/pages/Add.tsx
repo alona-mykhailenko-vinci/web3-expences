@@ -51,13 +51,13 @@ export default function Add() {
   return (
     <div className="min-h-[calc(100vh-160px)] py-8">
       <div className="max-w-2xl mx-auto space-y-8">
-        <h1 className="text-4xl font-bold text-center mb-8 text-gray-900">
+        <h1 className="text-4xl font-bold text-center mb-8" style={{ color: '#1a2037' }}>
           Add New Expense
         </h1>
 
         {/* Success Message */}
         {success && (
-          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-6">
+          <div className="px-4 py-3 rounded-lg mb-6" style={{ backgroundColor: '#e4d7bc', borderColor: '#1a2037', color: '#1a2037', border: '1px solid' }}>
             {success}
           </div>
         )}
@@ -78,7 +78,8 @@ export default function Add() {
         <div className="flex flex-row justify-center items-center mt-8">
             <button
               onClick={() => navigate('/list')}
-              className="text-gray-600 hover:text-gray-800 px-4 py-2 rounded transition-colors duration-200"
+              className="font-bold text-lg py-4 px-6 rounded-lg hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+              style={{ backgroundColor: '#1a2037', color: '#e4d7bc' }}
             >
               View All Expenses
             </button>

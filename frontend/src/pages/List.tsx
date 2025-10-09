@@ -1,7 +1,14 @@
 import { useState, useEffect } from 'react';
-import ExpenseItem from '../components/ExpenseItem';
 import ExpenseSorter from '../components/ExpenseSorter';
 import type { Expense } from '../types/Expense';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 const host = import.meta.env.VITE_API_URL;
 
@@ -100,29 +107,36 @@ export default function List() {
               </p>
             ) : (
               <div className="overflow-x-auto shadow-sm border border-gray-200 rounded-lg">
-                <table className="min-w-full bg-white">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Date
-                      </th>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Description
-                      </th>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Paid by
-                      </th>
-                      <th className="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Amount
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    {sortedExpenses.map((expense, index) => (
-                      <ExpenseItem key={expense.id} expense={expense} index={index} />
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="text-left">Date</TableHead>
+                      <TableHead className="text-left">Description</TableHead>
+                      <TableHead className="text-left">Paid by</TableHead>
+                      <TableHead className="text-right">Amount</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {sortedExpenses.map((expense) => (
+                      <TableRow key={expense.id} className="hover:bg-gray-50">
+                        <TableCell className="text-left text-sm text-gray-500 font-medium">
+                          {expense.date}
+                        </TableCell>
+                        <TableCell className="text-left">
+                          <div className="text-base font-semibold text-gray-900" title={expense.description}>
+                            {expense.description}
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-left text-sm text-gray-600">
+                          {expense.payer}
+                        </TableCell>
+                        <TableCell className="text-right text-base font-bold text-gray-900">
+                          ${expense.amount.toFixed(2)}
+                        </TableCell>
+                      </TableRow>
                     ))}
-                  </tbody>
-                </table>
+                  </TableBody>
+                </Table>
               </div>
             )}
           </div>

@@ -30,24 +30,28 @@ export default function ExpenseAdd({ addExpense }: ExpenseAddProps) {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="w-full max-w-md mx-auto bg-white border border-gray-300 rounded-xl shadow-sm px-6 py-6 space-y-6"
+      className="w-full max-w-md mx-auto bg-white rounded-xl shadow-sm px-6 py-6 space-y-6"
+      style={{ borderColor: '#1a2037', border: '1px solid' }}
     >
-      <h3 className="text-xl font-bold text-gray-900 text-center mb-6">
+      <h3 className="text-xl font-bold text-center mb-6" style={{ color: '#1a2037' }}>
         Add New Expense
       </h3>
 
       <div className="space-y-5">
         <div>
-          <label htmlFor="description" className="block text-sm font-semibold text-gray-700 mb-2">
+          <label htmlFor="description" className="block text-sm font-semibold mb-2" style={{ color: '#1a2037' }}>
             Description
           </label>
           <input
             id="description"
             type="text"
             placeholder="Enter expense description"
-            className={`w-full px-4 py-3 border rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
-              errors.description ? 'border-red-400' : 'border-gray-300'
+            className={`w-full px-4 py-3 border rounded-lg text-base focus:outline-none transition-colors ${
+              errors.description ? 'border-red-400' : ''
             }`}
+            style={{ 
+              borderColor: errors.description ? '#ef4444' : '#1a2037'
+            }}
             {...register('description', { required: 'Description is required' })}
           />
           {errors.description && (
@@ -56,15 +60,18 @@ export default function ExpenseAdd({ addExpense }: ExpenseAddProps) {
         </div>
 
         <div>
-          <label htmlFor="payer" className="block text-sm font-semibold text-gray-700 mb-2">
+          <label htmlFor="payer" className="block text-sm font-semibold mb-2" style={{ color: '#1a2037' }}>
             Payer
           </label>
           <select
             id="payer"
             defaultValue="Alice"
-            className={`w-full px-4 py-3 border rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors bg-white ${
-              errors.payer ? 'border-red-400' : 'border-gray-300'
+            className={`w-full px-4 py-3 border rounded-lg text-base focus:outline-none transition-colors bg-white ${
+              errors.payer ? 'border-red-400' : ''
             }`}
+            style={{ 
+              borderColor: errors.payer ? '#ef4444' : '#1a2037'
+            }}
             {...register('payer', { required: 'Payer is required' })}
           >
             <option value="Alice">Alice</option>
@@ -76,7 +83,7 @@ export default function ExpenseAdd({ addExpense }: ExpenseAddProps) {
         </div>
 
         <div>
-          <label htmlFor="amount" className="block text-sm font-semibold text-gray-700 mb-2">
+          <label htmlFor="amount" className="block text-sm font-semibold mb-2" style={{ color: '#1a2037' }}>
             Amount ($)
           </label>
           <input
@@ -85,9 +92,12 @@ export default function ExpenseAdd({ addExpense }: ExpenseAddProps) {
             step="0.01"
             min="0"
             placeholder="0.00"
-            className={`w-full px-4 py-3 border rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
-              errors.amount ? 'border-red-400' : 'border-gray-300'
+            className={`w-full px-4 py-3 border rounded-lg text-base focus:outline-none transition-colors ${
+              errors.amount ? 'border-red-400' : ''
             }`}
+            style={{ 
+              borderColor: errors.amount ? '#ef4444' : '#1a2037'
+            }}
             {...register('amount', { 
               required: 'Amount is required',
               min: { value: 0.01, message: 'Amount must be greater than 0' }
@@ -100,7 +110,8 @@ export default function ExpenseAdd({ addExpense }: ExpenseAddProps) {
 
         <button 
           type="submit"
-          className="w-full bg-blue-600 text-white font-bold text-lg py-4 px-6 rounded-lg hover:bg-blue-700 hover:shadow-lg transform hover:scale-105 transition-all duration-200 mt-6"
+          className="w-full font-bold text-lg py-4 px-6 rounded-lg hover:shadow-lg transform hover:scale-105 transition-all duration-200 mt-6"
+          style={{ backgroundColor: '#1a2037', color: '#e4d7bc' }}
         >
           Add Expense
         </button>
