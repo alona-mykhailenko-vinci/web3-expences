@@ -1,13 +1,4 @@
 import { useState, useEffect } from 'react';
-import {
-  Box,
-  Container,
-  Typography,
-  Stack,
-  Button,
-  CircularProgress,
-  Alert,
-} from '@mui/material';
 import ExpenseItem from '../components/ExpenseItem';
 import ExpenseSorter from '../components/ExpenseSorter';
 import type { Expense } from '../types/Expense';
@@ -63,84 +54,60 @@ export default function List() {
   const sortedExpenses = Array.isArray(expenses) ? [...expenses].sort(sortingAlgo) : [];
 
   return (
-    <Box
-      sx={{
-        minHeight: 'calc(100vh - 80px)', // Subtract navbar height
-        display: 'grid',
-        placeItems: 'center',
-        px: 2,
-        py: 6,
-        bgcolor: 'background.default',
-      }}
-    >
-      <Container maxWidth="sm" sx={{ px: { xs: 0, sm: 2 } }}>
-        <Box sx={{ maxWidth: 560, mx: 'auto' }}>
-          <Typography
-            variant="h4"
-            component="h1"
-            align="center"
-            fontWeight={700}
-            sx={{ mb: 3 }}
-          >
+    <div className="min-h-[calc(100vh-80px)] grid place-items-center px-2 py-6 bg-white">
+      <div className="max-w-sm px-0 sm:px-2">
+        <div className="max-w-xl mx-auto">
+          <h1 className="text-4xl font-bold text-center mb-6 text-gray-900">
             Expense List
-          </Typography>
-
-
+          </h1>
 
           {/* Expense Counter and Sorter */}
           {!loading && !error && expenses.length > 0 && (
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-              sx={{ mb: 2, px: 1 }}
-            >
-              <Typography variant="h6" color="text.secondary">
+            <div className="flex flex-row justify-between items-center mb-4 px-1">
+              <h2 className="text-xl text-gray-600">
                 Expenses ({expenses.length})
-              </Typography>
+              </h2>
               <ExpenseSorter setSortingAlgo={handleAlgoChange} />
-            </Stack>
+            </div>
           )}
 
           {/* Loading State */}
           {loading && (
-            <Stack direction="row" justifyContent="center" alignItems="center" spacing={1.5} sx={{ my: 4 }}>
-              <CircularProgress />
-              <Typography>Loading expenses…</Typography>
-            </Stack>
+            <div className="flex flex-row justify-center items-center gap-6 my-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+              <p className="text-gray-700">Loading expenses…</p>
+            </div>
           )}
 
           {/* Error State */}
           {error && !loading && (
-            <Alert
-              severity="error"
-              sx={{ mb: 3 }}
-              action={
-                <Button color="inherit" size="small" onClick={fetchExpenses}>
-                  Retry
-                </Button>
-              }
-            >
-              {error}
-            </Alert>
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6 flex justify-between items-center">
+              <span>{error}</span>
+              <button 
+                onClick={fetchExpenses}
+                className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition-colors duration-200"
+              >
+                Retry
+              </button>
+            </div>
           )}
 
           {/* Expenses List */}
           {!loading && !error && (
-            <Stack spacing={1.25} sx={{ width: '100%', maxWidth: 560, mx: 'auto' }}>
+            <div className="flex flex-col gap-5 w-full max-w-xl mx-auto">
               {sortedExpenses.length === 0 ? (
-                <Typography variant="body1" color="text.secondary" align="center" sx={{ my: 4 }}>
+                <p className="text-base text-gray-600 text-center my-8">
                   No expenses yet. Add your first one!
-                </Typography>
+                </p>
               ) : (
                 sortedExpenses.map((expense, index) => (
                   <ExpenseItem key={expense.id} expense={expense} index={index} />
                 ))
               )}
-            </Stack>
+            </div>
           )}
-        </Box>
-      </Container>
-    </Box>
+        </div>
+      </div>
+    </div>
   );
 }

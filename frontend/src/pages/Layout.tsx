@@ -1,14 +1,13 @@
 import { Outlet } from 'react-router-dom';
-import { Box } from '@mui/material';
 import NavBar from '../components/NavBar';
 
 export default function Layout() {
   return (
-    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div className="min-h-screen flex flex-col">
       <NavBar />
-      <Box sx={{ flex: 1 }}>
+      <div className="flex-1">
         <Outlet />
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 }

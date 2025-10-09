@@ -7,16 +7,16 @@ A full-stack expense tracking application built with React (frontend) and Expres
 - Add random expenses with automatic ID generation
 - View all expenses in a clean, centered layout
 - Reset all expenses to initial state
-- Responsive design with Material-UI components
+- Responsive design with Tailwind CSS
 - Real-time data persistence with JSON file storage
 
 ## Tech Stack
 
 ### Frontend
 - **React 19.1.1** with TypeScript
-- **Material-UI (MUI) 7.3.2** for components and styling
+- **Tailwind CSS 4.1.14** for styling and components
 - **Vite 7.1.6** for development and building
-- **Emotion** for CSS-in-JS styling
+- **React Router Dom 7.9.3** for routing
 
 ### Backend
 - **Express.js** for REST API
@@ -115,7 +115,7 @@ Frontend (React) ←→ Backend (Express) ←→ Data Storage (JSON)
 
 ## Development Notes
 
-- **MUI Integration**: Uses Material-UI with proper ThemeProvider setup
+- **Tailwind CSS**: Uses utility-first CSS framework for styling
 - **TypeScript**: Full TypeScript support for type safety
 - **Responsive Design**: Centered layout that works on all screen sizes
 - **State Management**: React hooks for local state management

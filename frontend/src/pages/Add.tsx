@@ -1,13 +1,5 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  Box,
-  Container,
-  Typography,
-  Stack,
-  Button,
-  Alert,
-} from '@mui/material';
 import ExpenseAdd from '../components/ExpenseAdd';
 import type { ExpenseInput } from '../types/Expense';
 
@@ -57,68 +49,43 @@ export default function Add() {
   };
 
   return (
-    <Box
-      sx={{
-        minHeight: 'calc(100vh - 80px)', // Subtract navbar height
-        display: 'grid',
-        placeItems: 'center',
-        px: 2,
-        py: 6,
-        bgcolor: 'background.default',
-      }}
-    >
-      <Container maxWidth="sm" sx={{ px: { xs: 0, sm: 2 } }}>
-        <Box sx={{ maxWidth: 560, mx: 'auto' }}>
-          <Typography
-            variant="h4"
-            component="h1"
-            align="center"
-            fontWeight={700}
-            sx={{ mb: 3 }}
-          >
+    <div className="min-h-[calc(100vh-80px)] grid place-items-center px-2 py-6 bg-white">
+      <div className="max-w-sm px-0 sm:px-2">
+        <div className="max-w-xl mx-auto">
+          <h1 className="text-4xl font-bold text-center mb-6 text-gray-900">
             Add New Expense
-          </Typography>
-
-
+          </h1>
 
           {/* Success Message */}
           {success && (
-            <Alert severity="success" sx={{ mb: 3 }}>
+            <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
               {success}
-            </Alert>
+            </div>
           )}
 
           {/* Error Message */}
           {error && (
-            <Alert severity="error" sx={{ mb: 3 }}>
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
               {error}
-            </Alert>
+            </div>
           )}
 
           {/* Add Expense Form */}
-          <Box sx={{ mb: 2 }}>
+          <div className="mb-4">
             <ExpenseAdd addExpense={handleAddExpense} />
-          </Box>
+          </div>
 
           {/* Navigation Options */}
-          <Stack
-            direction="row"
-            justifyContent="center"
-            alignItems="center"
-            spacing={2}
-            sx={{ mt: 4 }}
-          >
-            <Button
-              variant="text"
-              color="secondary"
+          <div className="flex flex-row justify-center items-center mt-8">
+            <button
               onClick={() => navigate('/list')}
-              sx={{ textTransform: 'none' }}
+              className="text-gray-600 hover:text-gray-800 px-4 py-2 rounded transition-colors duration-200"
             >
               View All Expenses
-            </Button>
-          </Stack>
-        </Box>
-      </Container>
-    </Box>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

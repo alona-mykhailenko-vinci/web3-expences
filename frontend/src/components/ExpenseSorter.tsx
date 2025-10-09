@@ -1,5 +1,4 @@
 import React from 'react';
-import { FormControl, Select, MenuItem, InputLabel, type SelectChangeEvent } from '@mui/material';
 import type { Expense } from '../types/Expense';
 
 interface ExpenseSorterProps {
@@ -9,7 +8,7 @@ interface ExpenseSorterProps {
 const ExpenseSorter: React.FC<ExpenseSorterProps> = ({ setSortingAlgo }) => {
   const [sortBy, setSortBy] = React.useState('none');
 
-  const handleSortChange = (event: SelectChangeEvent) => {
+  const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
     setSortBy(value);
 
@@ -45,31 +44,23 @@ const ExpenseSorter: React.FC<ExpenseSorterProps> = ({ setSortingAlgo }) => {
   };
 
   return (
-    <FormControl size="small" sx={{ minWidth: 160 }}>
-      <InputLabel id="sort-select-label">Sort by</InputLabel>
-      <Select
-        labelId="sort-select-label"
+    <div className="min-w-40">
+      <select
         value={sortBy}
-        label="Sort by"
         onChange={handleSortChange}
-        sx={{
-          borderRadius: 2,
-          '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'divider',
-          },
-        }}
+        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
       >
-        <MenuItem value="none">None</MenuItem>
-        <MenuItem value="date-desc">Date (Newest)</MenuItem>
-        <MenuItem value="date-asc">Date (Oldest)</MenuItem>
-        <MenuItem value="amount-desc">Amount (High to Low)</MenuItem>
-        <MenuItem value="amount-asc">Amount (Low to High)</MenuItem>
-        <MenuItem value="payer-asc">Payer (A-Z)</MenuItem>
-        <MenuItem value="payer-desc">Payer (Z-A)</MenuItem>
-        <MenuItem value="description-asc">Description (A-Z)</MenuItem>
-        <MenuItem value="description-desc">Description (Z-A)</MenuItem>
-      </Select>
-    </FormControl>
+        <option value="none">Sort by</option>
+        <option value="date-desc">Date (Newest)</option>
+        <option value="date-asc">Date (Oldest)</option>
+        <option value="amount-desc">Amount (High to Low)</option>
+        <option value="amount-asc">Amount (Low to High)</option>
+        <option value="payer-asc">Payer (A-Z)</option>
+        <option value="payer-desc">Payer (Z-A)</option>
+        <option value="description-asc">Description (A-Z)</option>
+        <option value="description-desc">Description (Z-A)</option>
+      </select>
+    </div>
   );
 };
 
