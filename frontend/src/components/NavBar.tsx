@@ -14,7 +14,7 @@ export default function NavBar() {
          style={{backgroundColor: 'rgba(26, 32, 55, 0.95)'}}>
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-center">
         <NavigationMenu className="text-white">
-          <NavigationMenuList className="flex space-x-2">
+          <NavigationMenuList className="flex space-x-8">
             <NavigationMenuItem>
               <NavigationMenuLink
                 asChild
