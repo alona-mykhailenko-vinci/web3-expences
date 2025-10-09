@@ -6,7 +6,9 @@ export default function Layout() {
     <div className="min-h-screen flex flex-col">
       <NavBar />
       <div className="flex-1">
-        <Outlet />
+        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Outlet />
+        </div>
       </div>
     </div>
   );

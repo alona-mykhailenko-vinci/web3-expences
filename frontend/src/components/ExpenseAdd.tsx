@@ -30,22 +30,22 @@ export default function ExpenseAdd({ addExpense }: ExpenseAddProps) {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="w-full border border-gray-300 rounded-lg px-4 py-4 bg-white transition-all duration-200 hover:border-gray-900 hover:-translate-y-0.5 mb-4"
+      className="w-full max-w-md mx-auto bg-white border border-gray-300 rounded-xl shadow-sm px-6 py-6 space-y-6"
     >
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">
+      <h3 className="text-xl font-bold text-gray-900 text-center mb-6">
         Add New Expense
       </h3>
 
-      <div className="space-y-4">
+      <div className="space-y-5">
         <div>
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="description" className="block text-sm font-semibold text-gray-700 mb-2">
             Description
           </label>
           <input
             id="description"
             type="text"
             placeholder="Enter expense description"
-            className={`w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent ${
+            className={`w-full px-4 py-3 border rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
               errors.description ? 'border-red-400' : 'border-gray-300'
             }`}
             {...register('description', { required: 'Description is required' })}
@@ -56,13 +56,13 @@ export default function ExpenseAdd({ addExpense }: ExpenseAddProps) {
         </div>
 
         <div>
-          <label htmlFor="payer" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="payer" className="block text-sm font-semibold text-gray-700 mb-2">
             Payer
           </label>
           <select
             id="payer"
             defaultValue="Alice"
-            className={`w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent ${
+            className={`w-full px-4 py-3 border rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors bg-white ${
               errors.payer ? 'border-red-400' : 'border-gray-300'
             }`}
             {...register('payer', { required: 'Payer is required' })}
@@ -76,8 +76,8 @@ export default function ExpenseAdd({ addExpense }: ExpenseAddProps) {
         </div>
 
         <div>
-          <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-1">
-            Amount
+          <label htmlFor="amount" className="block text-sm font-semibold text-gray-700 mb-2">
+            Amount ($)
           </label>
           <input
             id="amount"
@@ -85,7 +85,7 @@ export default function ExpenseAdd({ addExpense }: ExpenseAddProps) {
             step="0.01"
             min="0"
             placeholder="0.00"
-            className={`w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent ${
+            className={`w-full px-4 py-3 border rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
               errors.amount ? 'border-red-400' : 'border-gray-300'
             }`}
             {...register('amount', { 
@@ -100,7 +100,7 @@ export default function ExpenseAdd({ addExpense }: ExpenseAddProps) {
 
         <button 
           type="submit"
-          className="w-full bg-black text-white font-semibold py-2 px-6 rounded-lg hover:bg-gray-800 transition-colors duration-200"
+          className="w-full bg-blue-600 text-white font-bold text-lg py-4 px-6 rounded-lg hover:bg-blue-700 hover:shadow-lg transform hover:scale-105 transition-all duration-200 mt-6"
         >
           Add Expense
         </button>
