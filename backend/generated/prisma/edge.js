@@ -175,6 +175,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -185,7 +186,7 @@ const config = {
   },
   "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id                   Int        @id @default(autoincrement())\n  name                 String\n  email                String     @unique\n  bankAccount          String? // optional\n  paidExpenses         Expense[]  @relation(\"PayerExpenses\")\n  transfersOut         Transfer[] @relation(\"UserTransfersSource\")\n  transfersIn          Transfer[] @relation(\"UserTransfersTarget\")\n  participatedExpenses Expense[]  @relation(\"ParticipantExpenses\")\n}\n\nmodel Expense {\n  id           Int      @id @default(autoincrement())\n  description  String\n  amount       Float\n  date         DateTime @default(now())\n  payer        User     @relation(\"PayerExpenses\", fields: [payerId], references: [id])\n  payerId      Int\n  participants User[]   @relation(\"ParticipantExpenses\")\n}\n\nmodel Transfer {\n  id       Int      @id @default(autoincrement())\n  amount   Float\n  date     DateTime @default(now())\n  source   User     @relation(\"UserTransfersSource\", fields: [sourceId], references: [id])\n  sourceId Int\n  target   User     @relation(\"UserTransfersTarget\", fields: [targetId], references: [id])\n  targetId Int\n}\n",
   "inlineSchemaHash": "41b1047021724d659a5f4171c78a7808dcbb1ee02f48ae21f2a30432738fc161",
-  "copyEngine": false
+  "copyEngine": true
 }
 config.dirname = '/'
 
