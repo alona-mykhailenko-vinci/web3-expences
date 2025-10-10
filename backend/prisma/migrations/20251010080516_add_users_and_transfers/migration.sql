@@ -5,10 +5,6 @@
   - Added the required column `payerId` to the `Expense` table without a default value. This is not possible if the table is not empty.
 
 */
--- AlterTable
-ALTER TABLE "Expense" DROP COLUMN "payer",
-ADD COLUMN     "payerId" INTEGER NOT NULL;
-
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
@@ -43,6 +39,29 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE INDEX "_ParticipantExpenses_B_index" ON "_ParticipantExpenses"("B");
+
+-- Insert User records from existing Expense.payer data
+INSERT INTO "User" ("name", "email")
+SELECT DISTINCT 
+    "payer" as "name",
+    LOWER(REGEXP_REPLACE("payer", '[^a-zA-Z0-9]', '.', 'g')) || '@expenso.dev' as "email"
+FROM "Expense"
+WHERE "payer" IS NOT NULL;
+
+-- Add payerId column as nullable first
+ALTER TABLE "Expense" ADD COLUMN "payerId" INTEGER;
+
+-- Update payerId with corresponding User IDs
+UPDATE "Expense" 
+SET "payerId" = "User"."id"
+FROM "User"
+WHERE "User"."email" = LOWER(REGEXP_REPLACE("Expense"."payer", '[^a-zA-Z0-9]', '.', 'g')) || '@expenso.dev';
+
+-- Make payerId NOT NULL after setting values
+ALTER TABLE "Expense" ALTER COLUMN "payerId" SET NOT NULL;
+
+-- Drop the old payer column
+ALTER TABLE "Expense" DROP COLUMN "payer";
 
 -- AddForeignKey
 ALTER TABLE "Expense" ADD CONSTRAINT "Expense_payerId_fkey" FOREIGN KEY ("payerId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
