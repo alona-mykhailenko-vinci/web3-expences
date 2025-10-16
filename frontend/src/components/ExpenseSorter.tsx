@@ -26,10 +26,10 @@ const ExpenseSorter: React.FC<ExpenseSorterProps> = ({ setSortingAlgo }) => {
         setSortingAlgo((a: Expense, b: Expense) => b.amount - a.amount);
         break;
       case 'payer-asc':
-        setSortingAlgo((a: Expense, b: Expense) => a.payer.localeCompare(b.payer));
+        setSortingAlgo((a: Expense, b: Expense) => a.payer.name.localeCompare(b.payer.name));
         break;
       case 'payer-desc':
-        setSortingAlgo((a: Expense, b: Expense) => b.payer.localeCompare(a.payer));
+        setSortingAlgo((a: Expense, b: Expense) => b.payer.name.localeCompare(a.payer.name));
         break;
       case 'description-asc':
         setSortingAlgo((a: Expense, b: Expense) => a.description.localeCompare(b.description));

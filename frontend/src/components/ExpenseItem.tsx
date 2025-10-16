@@ -19,7 +19,7 @@ const ExpenseItem: React.FC<ExpenseItemProps> = ({ expense }) => {
         </div>
       </td>
       <td className="px-6 py-4 text-left text-sm text-gray-600">
-        {expense.payer}
+        {expense.payer.name}
       </td>
       <td className="px-6 py-4 text-right text-base font-bold text-gray-900">
         ${expense.amount.toFixed(2)}

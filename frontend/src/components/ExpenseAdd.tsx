@@ -1,5 +1,8 @@
 import { useForm } from 'react-hook-form';
-import type { ExpenseInput } from '../types/Expense';
+import { useState, useEffect } from 'react';
+import type { ExpenseInput, User } from '../types/Expense';
+
+const host = import.meta.env.VITE_API_URL;
 
 interface ExpenseAddProps {
   addExpense: (expense: ExpenseInput) => void;
@@ -12,11 +15,52 @@ interface FormData {
 }
 
 export default function ExpenseAdd({ addExpense }: ExpenseAddProps) {
+  const [users, setUsers] = useState<User[]>([]);
+  const [loadingUsers, setLoadingUsers] = useState(true);
+  const [userError, setUserError] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
+
+  // Fetch users from backend
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        setLoadingUsers(true);
+        console.log('Fetching users from:', `${host}/users`);
+        
+        const response = await fetch(`${host}/users`);
+        console.log('Response status:', response.status);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const serviceResponse = await response.json();
+        console.log('Fetched service response:', serviceResponse);
+        
+        // Handle ServiceResponse format: { success, message, responseObject, statusCode }
+        if (serviceResponse.success && serviceResponse.responseObject) {
+          const userData = serviceResponse.responseObject;
+          setUsers(Array.isArray(userData) ? userData : []);
+          setUserError(null);
+        } else {
+          throw new Error(serviceResponse.message || 'Failed to fetch users');
+        }
+      } catch (error) {
+        console.error('Failed to fetch users:', error);
+        setUserError(`Failed to load users: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        setUsers([]);
+      } finally {
+        setLoadingUsers(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   const onSubmit = ({ description, payer, amount }: FormData) => {
     addExpense({
@@ -71,7 +115,7 @@ export default function ExpenseAdd({ addExpense }: ExpenseAddProps) {
           </label>
           <select
             id="payer"
-            defaultValue="Alice"
+            defaultValue=""
             className={`w-full px-5 py-4 border-2 rounded-xl text-base focus:outline-none transition-all duration-300 focus:scale-105 bg-white/50 backdrop-blur-sm ${
               errors.payer ? 'border-red-400' : 'focus:shadow-lg'
             }`}
@@ -80,11 +124,20 @@ export default function ExpenseAdd({ addExpense }: ExpenseAddProps) {
             }}
             {...register('payer', { required: 'Payer is required' })}
           >
-            <option value="Alice">Alice</option>
-            <option value="Bob">Bob</option>
+            <option value="" disabled>
+              {loadingUsers ? 'Loading users...' : userError ? 'Error loading users' : users.length === 0 ? 'No users available' : 'Select payer'}
+            </option>
+            {!loadingUsers && !userError && users.length > 0 && users.map((user) => (
+              <option key={user.id} value={user.name}>
+                {user.name}
+              </option>
+            ))}
           </select>
           {errors.payer && (
             <p className="text-red-500 text-xs mt-1">{errors.payer.message}</p>
+          )}
+          {userError && (
+            <p className="text-red-500 text-xs mt-1">{userError}</p>
           )}
         </div>
 

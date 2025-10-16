@@ -1,30 +1,51 @@
 import type { User } from "@/api/user/userModel";
+import { PrismaClient } from '../../../generated/prisma';
 
-export const users: User[] = [
-	{
-		id: 1,
-		name: "Alice",
-		email: "alice@example.com",
-		age: 42,
-		createdAt: new Date(),
-		updatedAt: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // 5 days later
-	},
-	{
-		id: 2,
-		name: "Robert",
-		email: "Robert@example.com",
-		age: 21,
-		createdAt: new Date(),
-		updatedAt: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // 5 days later
-	},
-];
+const prisma = new PrismaClient();
 
 export class UserRepository {
 	async findAllAsync(): Promise<User[]> {
-		return users;
+		const users = await prisma.user.findMany({
+			select: {
+				id: true,
+				name: true,
+				email: true,
+				bankAccount: true,
+			}
+		});
+		
+		// Transform Prisma user to match the User model expected by the service
+		return users.map(user => ({
+			id: user.id,
+			name: user.name,
+			email: user.email,
+			age: 0, // Default age since it's not in our database schema
+			createdAt: new Date(),
+			updatedAt: new Date(),
+		}));
 	}
 
 	async findByIdAsync(id: number): Promise<User | null> {
-		return users.find((user) => user.id === id) || null;
+		const user = await prisma.user.findUnique({
+			where: { id },
+			select: {
+				id: true,
+				name: true,
+				email: true,
+				bankAccount: true,
+			}
+		});
+		
+		if (!user) return null;
+		
+		// Transform Prisma user to match the User model expected by the service
+		return {
+			id: user.id,
+			name: user.name,
+			email: user.email,
+			age: 0, // Default age since it's not in our database schema
+			createdAt: new Date(),
+			updatedAt: new Date(),
+		};
 	}
 }

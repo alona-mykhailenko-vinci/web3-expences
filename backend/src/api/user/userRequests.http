@@ -1,0 +1,35 @@
+### Get all users
+GET http://localhost:3000/users
+Content-Type: application/json
+
+###
+
+### Get user by ID - Alice (ID: 1)
+GET http://localhost:3000/users/1
+Content-Type: application/json
+
+###
+
+### Get user by ID - Bob (ID: 2)
+GET http://localhost:3000/users/2
+Content-Type: application/json
+
+###
+
+### Get user by ID - Charlie (ID: 3)
+GET http://localhost:3000/users/3
+Content-Type: application/json
+
+###
+
+### Get user by ID - Non-existent user (should return 404)
+GET http://localhost:3000/users/999
+Content-Type: application/json
+
+###
+
+### Get user with invalid ID (should return 400)
+GET http://localhost:3000/users/invalid
+Content-Type: application/json
+
+###
