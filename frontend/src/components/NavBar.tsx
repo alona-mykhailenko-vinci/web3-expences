@@ -32,14 +32,14 @@ export default function NavBar() {
             <NavigationMenuItem>
               <NavigationMenuLink
                 asChild
-                className={`px-6 py-3 rounded-lg transition-all duration-300 hover:bg-white/10 ${location.pathname === '/add' ? 'font-bold underline underline-offset-4' : ''}`}
+                className={`px-6 py-3 rounded-lg transition-all duration-300 hover:bg-white/10 ${location.pathname === '/expenses/new' ? 'font-bold underline underline-offset-4' : ''}`}
                 style={{
                   color: '#e4d7bc',
                   backgroundColor: 'transparent'
                 }}
               >
-                <NavLink to="/add">
-                  Add Expense
+                <NavLink to="/expenses/new">
+                  New Expense
                 </NavLink>
               </NavigationMenuLink>
             </NavigationMenuItem>

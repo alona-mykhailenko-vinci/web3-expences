@@ -31,13 +31,13 @@ export default function ExpenseTransactionItem({ transaction }: ExpenseTransacti
             
             <div className="space-y-2">
               <p className="text-lg font-medium">
-                <span className="font-semibold text-primary">{transaction.payer.name}</span> paid{' '}
+                <span className="font-semibold" style={{ color: '#1a2037' }}>{transaction.payer.name}</span> paid{' '}
                 <span className="font-bold text-green-600">${Math.abs(transaction.amount).toFixed(2)}</span>{' '}
-                for <span className="font-semibold">{participantCount} people</span>
+                for <span className="font-semibold" style={{ color: '#1a2037' }}>{participantCount} people</span>
               </p>
               
               <p className="text-muted-foreground">
-                <span className="font-medium">Description:</span> {transaction.description}
+                <span className="font-medium" style={{ color: '#4a5568' }}>Description:</span> {transaction.description}
               </p>
               
               <div className="flex items-center gap-1 text-sm text-muted-foreground">
@@ -55,7 +55,8 @@ export default function ExpenseTransactionItem({ transaction }: ExpenseTransacti
             
             <Link 
               to={`/expenses/${expenseId}`}
-              className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors text-sm font-medium"
+              className="px-4 py-2 rounded-md hover:opacity-90 transition-colors text-sm font-medium"
+              style={{ backgroundColor: '#1a2037', color: '#e4d7bc' }}
             >
               View Details
             </Link>
