@@ -71,6 +71,20 @@ export default function NavBar() {
                 </NavLink>
               </NavigationMenuLink>
             </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink
+                asChild
+                className={`px-6 py-3 rounded-lg transition-all duration-300 hover:bg-white/10 ${location.pathname === '/transfers/new' ? 'font-bold underline underline-offset-4' : ''}`}
+                style={{
+                  color: '#e4d7bc',
+                  backgroundColor: 'transparent'
+                }}
+              >
+                <NavLink to="/transfers/new">
+                  New Transfer
+                </NavLink>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
       </div>

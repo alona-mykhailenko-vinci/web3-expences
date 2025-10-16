@@ -24,7 +24,7 @@ export default function Layout() {
         <NavBar />
         <div className="flex-1">
           <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Outlet />
+            <Outlet context={{ currentUser: loaderData.currentUser }} />
           </div>
         </div>
       </div>

@@ -5,7 +5,7 @@ import List from './pages/List';
 import Add from './pages/Add';
 import Transactions, { loader as transactionsLoader } from './pages/Transactions';
 import ExpenseDetails, { loader as expenseDetailLoader } from './pages/ExpenseDetails';
-// import NewTransfer, { loader as NewTransferLoader } from './pages/NewTransfer';
+import NewTransfer, { loader as newTransferLoader } from './pages/NewTransfer';
 
 const router = createBrowserRouter([
     {
@@ -32,11 +32,11 @@ const router = createBrowserRouter([
           Component: ExpenseDetails,
           loader: expenseDetailLoader,
         },
-        // {
-        //   path: 'transfers/new',
-        //   Component: NewTransfer,
-        //   loader: NewTransferLoader,
-        // }
+        {
+          path: 'transfers/new',
+          Component: NewTransfer,
+          loader: newTransferLoader,
+        }
       ],
     },
   ]);
