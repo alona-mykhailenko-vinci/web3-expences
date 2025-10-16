@@ -28,7 +28,7 @@ app.use(requestLogger);
 
 // Routes
 app.use("/health-check", healthCheckRouter);
-app.use("/users", userRouter);
+app.use("/api/users", userRouter);
 app.use("/api/expenses", expenseRouter);
 
 // Error handlers

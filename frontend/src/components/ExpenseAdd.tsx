@@ -30,9 +30,9 @@ export default function ExpenseAdd({ addExpense }: ExpenseAddProps) {
     const fetchUsers = async () => {
       try {
         setLoadingUsers(true);
-        console.log('Fetching users from:', `${host}/users`);
+        console.log('Fetching users from:', `${host}/api/users`);
         
-        const response = await fetch(`${host}/users`);
+        const response = await fetch(`${host}/api/users`);
         console.log('Response status:', response.status);
         
         if (!response.ok) {
