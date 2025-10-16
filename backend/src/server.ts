@@ -5,6 +5,8 @@ import { pino } from "pino";
 import { healthCheckRouter } from "@/api/healthCheck/healthCheckRouter";
 import { userRouter } from "@/api/user/userRouter";
 import expenseRouter from "@/api/expense/expenseRouter";
+import transferRouter from "@/api/transfer/transferRouter";
+import transactionRouter from "@/api/transaction/transactionRouter";
 import errorHandler from "@/common/middleware/errorHandler";
 import rateLimiter from "@/common/middleware/rateLimiter";
 import requestLogger from "@/common/middleware/requestLogger";
@@ -30,6 +32,8 @@ app.use(requestLogger);
 app.use("/health-check", healthCheckRouter);
 app.use("/api/users", userRouter);
 app.use("/api/expenses", expenseRouter);
+app.use("/api/transfers", transferRouter);
+app.use("/api/transactions", transactionRouter);
 
 // Error handlers
 app.use(errorHandler());

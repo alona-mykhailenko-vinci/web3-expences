@@ -1,0 +1,22 @@
+### Get all transfers
+GET http://localhost:8080/api/transfers
+
+### Create a new transfer
+POST http://localhost:8080/api/transfers
+Content-Type: application/json
+
+{
+  "amount": 50.00,
+  "sourceId": 1,
+  "targetId": 2
+}
+
+### Create transfer with validation error (negative amount)
+POST http://localhost:8080/api/transfers
+Content-Type: application/json
+
+{
+  "amount": -25.00,
+  "sourceId": 1,
+  "targetId": 2
+}
