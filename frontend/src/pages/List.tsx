@@ -154,7 +154,7 @@ export default function List() {
                                   backgroundColor: '#e4d7bc', 
                                   color: '#1a2037'
                                 }}>
-                            {expense.payer}
+                            {expense.payer.name}
                           </span>
                         </TableCell>
                         <TableCell className="text-right py-6 px-6 text-lg font-bold" style={{ color: '#1a2037' }}>
