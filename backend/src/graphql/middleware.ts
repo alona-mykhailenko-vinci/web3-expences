@@ -22,12 +22,29 @@ type Expense {
 type Query {
   expense(id: Int!): Expense
 }
+
+type Mutation {
+  createExpense(
+    description: String!,
+    amount: Float!,
+    date: String!,
+    payerId: Int!,
+    participantIds: [Int!]!
+  ): Expense!
+}
    `;
 
 const resolvers = {
   Query: { 
     expense: async (_parent : any, args : any, _context : any) => expenseRepository.getExpenseById(args.id)
+  },
+  Mutation: {
+  createExpense: async (_parent: any, args: any, _context: any) => {
+    const { description, amount, date, payerId, participantIds } = args;
+    const parsedDate = new Date(date);
+    return expenseRepository.createExpense({ description, amount, date: parsedDate, payerId, participantIds })
   }
+}
 };
 
 const server = new ApolloServer({ typeDefs, resolvers });
