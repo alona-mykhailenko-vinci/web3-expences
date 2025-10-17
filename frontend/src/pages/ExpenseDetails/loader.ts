@@ -1,34 +1,40 @@
-import type { LoaderFunctionArgs } from 'react-router-dom';
-import ApiClient from '../../lib/api';
-import type { Expense } from '../../types/Expense';
+import type { Expense } from "@/types/Expense";
+import type { LoaderFunctionArgs } from "react-router";
+import { gql } from "@apollo/client";
+import graphqlClient from "@/lib/graphql-client";
+
+const EXPENSE_QUERY = gql`
+  query ExpenseDetail($id: ID!) {
+    expense(id: $id) {
+      id
+      description
+      amount
+      payer {
+        name
+        bankAccount
+      }
+      participants {
+        name
+      }
+    }
+  }
+`;
 
 export interface LoaderData {
-  expense: Expense | null;
+  expense: Expense;
 }
 
-export async function loader({ params }: LoaderFunctionArgs): Promise<LoaderData> {
-  try {
-    const expenseId = params.id;
-    
-    if (!expenseId) {
-      throw new Error('Expense ID is required');
-    }
+export async function loader({ params }: LoaderFunctionArgs) {
+  const { data, error } = await graphqlClient.query<{ expense: Expense }>({
+    query: EXPENSE_QUERY,
+    variables: { id: params.id },
+  });
 
-    const expenseIdNumber = parseInt(expenseId, 10);
-    if (isNaN(expenseIdNumber)) {
-      throw new Error('Invalid expense ID');
-    }
-
-    const expense = await ApiClient.getExpenseById(expenseIdNumber);
-    
-    return {
-      expense,
-    };
-  } catch (error) {
-    console.error('Failed to load expense:', error);
-    // Return null expense on error to handle gracefully in component
-    return {
-      expense: null,
-    };
+  if (!data?.expense || error) {
+    throw new Error(
+      "Error while retrieving expense details from the server: " + error
+    );
   }
-}
+
+  return { expense: data.expense };
+}   

@@ -3,10 +3,11 @@ import { expressMiddleware } from "@as-integrations/express5";
 import * as expenseRepository from "@/api/expense/expenseRepository";
 
 const typeDefs = `#graphql
-     type User {
+  type User {
   id: ID!
   name: String!
   email: String
+  bankAccount: String!
 }
 
 type Expense {
