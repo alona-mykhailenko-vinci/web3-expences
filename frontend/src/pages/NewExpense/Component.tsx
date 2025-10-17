@@ -20,19 +20,17 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const CREATE_EXPENSE_GQL = gql`
   mutation CreateExpense(
-    $description: String!
-    $amount: Float!
-    $date: DateTime!
-    $payerId: Int!
-    $participantIds: [Int!]!
-  ) {
+      $description: String!, 
+      $amount: Float!, 
+      $date: DateTime!, 
+      $payerId: Int!, 
+      $participantIds: [Int!]!) {
     createExpense(
-      description: $description
-      amount: $amount
-      date: $date
-      payerId: $payerId
-      participantIds: $participantIds
-    ) {
+      description: $description, 
+      amount: $amount, 
+      date: $date, 
+      payerId: $payerId, 
+      participantIds: $participantIds) {
       id
       description
     }
@@ -94,9 +92,9 @@ const onSubmit = async (data: ExpenseFormData) => {
         variables: {
           description: data.description,
           amount: data.amount,
-          date: data.date ? new Date(data.date) : new Date(),
-          payerId: user.userId, // Use authenticated user's ID
-          participantIds: data.participantIds.map((id) => Number(id)),
+          date: data.date,
+          payerId: Number(user.userId),
+          participantIds: data.participantIds.map(id => Number(id)),
         },
       });
       toast('Expense has been created.');
