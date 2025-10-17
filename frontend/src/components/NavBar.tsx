@@ -11,7 +11,7 @@ export default function NavBar() {
 
   return (
     <nav className="w-full sticky top-0 z-50 backdrop-blur-md shadow-xl border-b border-white/10" 
-         style={{backgroundColor: '#06141B'}}>
+         style={{backgroundColor: '#11212D'}}>
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-center">
         <NavigationMenu className="text-white">
           <NavigationMenuList className="flex space-x-8">

@@ -18,7 +18,6 @@ export default function Welcome() {
                 }}>
               Expense Tracker
             </h1>
-            <div className="w-24 h-1 mx-auto rounded-full" style={{ backgroundColor: '#e4d7bc' }}></div>
           </div>
           
           <div className="space-y-4 max-w-3xl mx-auto">

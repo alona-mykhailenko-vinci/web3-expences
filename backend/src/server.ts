@@ -1,6 +1,8 @@
 import cors from "cors";
 import express, { type Express } from "express";
+import graphqlMiddleware from "./graphql/middleware";
 import helmet from "helmet";
+import { ruruHTML } from "../node_modules/ruru/dist/server.js";
 import { pino } from "pino";
 import { healthCheckRouter } from "@/api/healthCheck/healthCheckRouter";
 import { userRouter } from "@/api/user/userRouter";
@@ -12,9 +14,22 @@ import rateLimiter from "@/common/middleware/rateLimiter";
 import requestLogger from "@/common/middleware/requestLogger";
 import { env } from "@/common/utils/envConfig";
 
+
 const logger = pino({ name: "server start" });
 const app: Express = express();
 
+if (env.isDevelopment) {
+    const config = { endpoint: "/graphql" };
+    // Serve Ruru HTML
+    app.get("/ruru", (req, res) => {
+    res.format({
+        html: () => res.status(200).send(ruruHTML(config)),
+        default: () => res.status(406).send("Not Acceptable"),
+    });
+});
+// ...
+app.use("/graphql", graphqlMiddleware);
+}
 // Set the application to trust the reverse proxy
 app.set("trust proxy", true);
 
