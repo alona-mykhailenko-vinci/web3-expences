@@ -11,7 +11,7 @@ export default function NavBar() {
 
   return (
     <nav className="w-full sticky top-0 z-50 backdrop-blur-md shadow-xl border-b border-white/10" 
-         style={{backgroundColor: 'rgba(26, 32, 55, 0.95)'}}>
+         style={{backgroundColor: '#06141B'}}>
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-center">
         <NavigationMenu className="text-white">
           <NavigationMenuList className="flex space-x-8">
@@ -20,7 +20,7 @@ export default function NavBar() {
                 asChild
                 className={`px-6 py-3 rounded-lg transition-all duration-300 hover:bg-white/10 ${location.pathname === '/' ? 'font-bold underline underline-offset-4' : ''}`}
                 style={{
-                  color: '#e4d7bc',
+                  color: '#CCD0CF',
                   backgroundColor: 'transparent'
                 }}
               >
@@ -34,7 +34,7 @@ export default function NavBar() {
                 asChild
                 className={`px-6 py-3 rounded-lg transition-all duration-300 hover:bg-white/10 ${location.pathname === '/expenses/new' ? 'font-bold underline underline-offset-4' : ''}`}
                 style={{
-                  color: '#e4d7bc',
+                  color: '#CCD0CF',
                   backgroundColor: 'transparent'
                 }}
               >
@@ -48,7 +48,7 @@ export default function NavBar() {
                 asChild
                 className={`px-6 py-3 rounded-lg transition-all duration-300 hover:bg-white/10 ${location.pathname === '/list' ? 'font-bold underline underline-offset-4' : ''}`}
                 style={{
-                  color: '#e4d7bc',
+                  color: '#CCD0CF',
                   backgroundColor: 'transparent'
                 }}
               >
@@ -62,7 +62,7 @@ export default function NavBar() {
                 asChild
                 className={`px-6 py-3 rounded-lg transition-all duration-300 hover:bg-white/10 ${location.pathname === '/transactions' ? 'font-bold underline underline-offset-4' : ''}`}
                 style={{
-                  color: '#e4d7bc',
+                  color: '#CCD0CF',
                   backgroundColor: 'transparent'
                 }}
               >
@@ -76,7 +76,7 @@ export default function NavBar() {
                 asChild
                 className={`px-6 py-3 rounded-lg transition-all duration-300 hover:bg-white/10 ${location.pathname === '/transfers/new' ? 'font-bold underline underline-offset-4' : ''}`}
                 style={{
-                  color: '#e4d7bc',
+                  color: '#CCD0CF',
                   backgroundColor: 'transparent'
                 }}
               >
