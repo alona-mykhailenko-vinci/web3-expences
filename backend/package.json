@@ -23,6 +23,7 @@
 	"dependencies": {
 		"@apollo/server": "^5.0.0",
 		"@as-integrations/express5": "^1.1.2",
+		"@pothos/core": "^4.10.0",
 		"@prisma/client": "^6.17.0",
 		"cors": "2.8.5",
 		"dotenv": "17.2.1",
@@ -38,6 +39,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.1.4",
+		"@pothos/plugin-prisma": "^4.12.0",
 		"@types/cors": "2.8.19",
 		"@types/express": "5.0.3",
 		"@types/supertest": "6.0.3",
@@ -67,5 +69,4 @@
 		"skipNodeModulesBundle": true
 	},
 	"packageManager": "pnpm@10.14.0"
-	
 }
