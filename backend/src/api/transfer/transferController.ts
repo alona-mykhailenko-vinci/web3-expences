@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import * as transferRepository from './transferRepository';
 import { StatusCodes } from "http-status-codes/build/cjs/status-codes";
-import { PrismaClient } from '../../../generated/prisma';
+import { PrismaClient } from '../../generated/prisma/client';
 
 const prisma = new PrismaClient();
 
