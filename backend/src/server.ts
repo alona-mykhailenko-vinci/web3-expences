@@ -13,6 +13,7 @@ import errorHandler from "@/common/middleware/errorHandler";
 import rateLimiter from "@/common/middleware/rateLimiter";
 import requestLogger from "@/common/middleware/requestLogger";
 import { env } from "@/common/utils/envConfig";
+import authRouter from './api/auth/authRouter';
 
 
 const logger = pino({ name: "server start" });
@@ -48,6 +49,8 @@ app.use("/api/users", userRouter);
 app.use("/api/expenses", expenseRouter);
 app.use("/api/transfers", transferRouter);
 app.use("/api/transactions", transactionRouter);
+
+app.use('/auth', authRouter);
 
 app.use("/graphql", graphqlMiddleware);
 
