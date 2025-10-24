@@ -1,10 +1,7 @@
-import express, { type Router } from "express";
-import { GetUserSchema } from "@/api/user/userModel";
-import { validateRequest } from "@/common/utils/httpHandlers";
-import { userController } from "./userController";
+import { Router } from 'express';
+import * as userController from './userController';
 
-export const userRouter: Router = express.Router();
+const router = Router();
+router.get('/', userController.listUsers);
 
-userRouter.get("/", userController.getUsers);
-
-userRouter.get("/:id", validateRequest(GetUserSchema), userController.getUser);
+export default router;
