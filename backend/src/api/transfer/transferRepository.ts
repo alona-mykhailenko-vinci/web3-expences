@@ -8,9 +8,6 @@ export async function getAllTransfers() {
       source: true,
       target: true,
     },
-    orderBy: {
-      date: 'desc',
-    },
   });
 }
 
@@ -41,10 +38,6 @@ export async function createTransfer({
       date,
       source: { connect: { id: sourceId } },
       target: { connect: { id: targetId } },
-    },
-    include: {
-      source: true,
-      target: true,
     },
   });
 }

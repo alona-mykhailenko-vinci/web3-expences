@@ -1,5 +1,5 @@
  @hostname = localhost:8080
 
 ### Get all expenses
-GET http://{{hostname}}/api/users
+GET http://{{hostname}}/api/transactions
 Content-Type: application/json

@@ -40,6 +40,8 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 -- CreateIndex
 CREATE INDEX "_ParticipantExpenses_B_index" ON "_ParticipantExpenses"("B");
 
+
+
 -- Insert User records from existing Expense.payer data
 INSERT INTO "User" ("name", "email")
 SELECT DISTINCT 

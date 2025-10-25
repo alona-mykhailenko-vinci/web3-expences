@@ -1,20 +1,25 @@
-import type { Identifiable } from './Core';
-
-export interface User {
-  id: number;
-  name: string;
-  email: string;
-  bankAccount?: string;
-}
+import type { User } from './User';
 
 export interface ExpenseInput {
-  date: string;
   description: string;
-  payer: string | User;
+  payer: string;
   amount: number;
+  date: string; // ISO string
 }
 
-export interface Expense extends ExpenseInput, Identifiable {
+export interface Expense {
+  id: string;
+  description: string;
   payer: User;
-  participants?: User[];
+  amount: number;
+  date: string; // ISO string
+  participants: User[];
+}
+
+export interface NewExpensePayload {
+  description: string;
+  amount: number;
+  date?: string; // ISO string
+  payerId: number;
+  participantIds: number[];
 }

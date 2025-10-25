@@ -52,7 +52,7 @@ export default function List() {
       <div className="space-y-8 relative z-10">
         <div className="text-center space-y-4">
           <h1 className="text-5xl font-bold mb-4" style={{ color: '#1a2037' }}>
-            Transaction List
+            Expences List
           </h1>
           <div className="w-24 h-1 mx-auto rounded-full" style={{ backgroundColor: '#e4d7bc' }}></div>
           <p className="text-lg opacity-70 mt-4" style={{ color: '#6b7280' }}>

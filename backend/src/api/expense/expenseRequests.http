@@ -1,4 +1,4 @@
-@hostname = localhost:3000
+ @hostname = localhost:8080
 
 ### Get all expenses
 GET http://{{hostname}}/api/expenses
@@ -13,10 +13,10 @@ POST http://{{hostname}}/api/expenses
 Content-Type: application/json
 
 {
-  "description": "Office Supplies",
-  "amount": 45.99,
-  "payerId": 1,
-  "participantIds": [1, 2]
+"description": "Office Supplies",
+"amount": 45.99,
+"payerId": 1,
+"participantIds": [1, 2]
 }
 
 ### Create new expense (Error, wrong participant ID)
@@ -24,8 +24,8 @@ POST http://{{hostname}}/api/expenses
 Content-Type: application/json
 
 {
-  "description": "Office Supplies",
-  "amount": 45.99,
-  "payerId": 1,
-  "participantIds": [1, 99]
+"description": "Office Supplies",
+"amount": 45.99,
+"payerId": 1,
+"participantIds": [1, 99]
 }

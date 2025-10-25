@@ -7,13 +7,14 @@ type ExpenseWithPayerAndParticipants = Prisma.ExpenseGetPayload<{
     participants: true;
   };
 }>;
-
 type TransferWithSourceAndTarget = Prisma.TransferGetPayload<{
   include: {
     source: true;
     target: true;
   };
 }>;
+
+export type Transaction = z.infer<typeof TransactionSchema>;
 
 export const TransactionSchema = z.object({
   id: z.string(),
@@ -26,8 +27,6 @@ export const TransactionSchema = z.object({
 });
 
 export const TransactionArraySchema = z.array(TransactionSchema);
-
-export type Transaction = z.infer<typeof TransactionSchema>;
 
 export const fromExpense = (expense: ExpenseWithPayerAndParticipants): Transaction => {
   return TransactionSchema.parse({
@@ -44,7 +43,7 @@ export const fromExpense = (expense: ExpenseWithPayerAndParticipants): Transacti
 export const fromTransfer = (transfer: TransferWithSourceAndTarget): Transaction => {
   return TransactionSchema.parse({
     id: `transfer-${transfer.id}`,
-    description: `Transfer from ${transfer.source.name} to ${transfer.target.name}`,
+    description: 'Transfer',
     amount: transfer.amount,
     date: transfer.date,
     kind: 'transfer',

@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { useState, useEffect } from 'react';
-import type { ExpenseInput, User } from '../types/Expense';
+import type { ExpenseInput } from '../types/Expense';
+import type { User } from '../types/User';
 
 const host = import.meta.env.VITE_API_URL;
 

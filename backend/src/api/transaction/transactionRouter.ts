@@ -1,8 +1,7 @@
-import { Router } from "express";
-import * as transactionController from "./transactionController";
+import { Router } from 'express';
+import * as transactionController from './transactionController';
 
-const transactionRouter = Router();
+const router = Router();
+router.get('/', transactionController.listTransactions);
 
-transactionRouter.get("/", transactionController.listTransactions);
-
-export default transactionRouter;
+export default router;

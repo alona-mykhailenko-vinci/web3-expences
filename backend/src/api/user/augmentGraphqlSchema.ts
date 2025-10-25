@@ -6,7 +6,7 @@ const augmentSchema = (builder: typeof SchemaBuilder) => {
       id: t.exposeID('id'),
       name: t.exposeString('name'),
       email: t.exposeString('email'),
-      bankAccount: t.exposeString('bankAccount', { nullable: true }),
+      bankAccount: t.exposeString('bankAccount'),
     }),
   });
 };
