@@ -4,6 +4,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { gql } from '@apollo/client';
 import graphqlClient from '@/lib/graphql-client';
+import { useCurrentUser } from '@/pages/Layout';
+
 
 import {  EuroIcon, Calendar, ArrowLeft, Plus, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -22,7 +24,7 @@ const CREATE_EXPENSE_GQL = gql`
   mutation CreateExpense(
       $description: String!, 
       $amount: Float!, 
-      $date: DateTime!, 
+      $date: String!, 
       $payerId: Int!, 
       $participantIds: [Int!]!) {
     createExpense(
@@ -39,6 +41,7 @@ const CREATE_EXPENSE_GQL = gql`
 
 const expenseSchema = z.object({
   description: z.string().min(1, 'Description is required'),
+  payerId: z.string().min(1, 'Payer is required'),
   amount: z.coerce.number<number>().min(0.01, 'Amount must be greater than 0'),
   date: z.string().optional(),
   participantIds: z.array(z.string()).min(1, 'At least one participant is required'),
@@ -46,8 +49,7 @@ const expenseSchema = z.object({
 type ExpenseFormData = z.infer<typeof expenseSchema>;
 
 export default function ExpenseForm() {
-  // Mock user for now - replace with actual auth context
-  const user = { userId: 1 };
+  const currentUser = useCurrentUser();
   const { users } = useLoaderData<LoaderData>();
   const navigate = useNavigate();
 
@@ -55,7 +57,8 @@ export default function ExpenseForm() {
     resolver: zodResolver(expenseSchema),
     defaultValues: {
       description: '',
-      amount: 0,
+      payerId: currentUser?.id.toString() || '',
+      amount: undefined,
       date: new Date().toISOString().split('T')[0], // Today's date in YYYY-MM-DD format
       participantIds: [],
     },
@@ -81,8 +84,8 @@ export default function ExpenseForm() {
   };
 
 const onSubmit = async (data: ExpenseFormData) => {
-    if (!user) {
-      toast.error('You must be logged in to create an expense');
+    if (!data.payerId) {
+      toast.error('Please select who paid for this expense');
       return;
     }
 
@@ -93,12 +96,12 @@ const onSubmit = async (data: ExpenseFormData) => {
           description: data.description,
           amount: data.amount,
           date: data.date,
-          payerId: Number(user.userId),
+          payerId: Number(data.payerId),
           participantIds: data.participantIds.map(id => Number(id)),
         },
       });
       toast('Expense has been created.');
-      return navigate('/transactions');
+      return navigate('/expenses');
     } catch (error) {
       console.error('Expense creation failed:', error);
       form.setError('root', {
@@ -107,10 +110,6 @@ const onSubmit = async (data: ExpenseFormData) => {
       });
     }
   };
-
-
-
-
 
 
   return (
@@ -123,7 +122,7 @@ const onSubmit = async (data: ExpenseFormData) => {
         <div className="flex items-center gap-4">
           <Button
             variant="ghost"
-            onClick={() => navigate('/transactions')}
+            onClick={() => navigate('/expenses')}
             className="flex items-center gap-2 shadow-sm"
             style={{ 
               backgroundColor: 'rgba(255, 255, 255, 0.6)',
@@ -132,7 +131,7 @@ const onSubmit = async (data: ExpenseFormData) => {
             }}
           >
             <ArrowLeft className="h-4 w-4" />
-            Back to Transactions
+            Back to Expenses
           </Button>
         </div>
 
@@ -216,8 +215,7 @@ const onSubmit = async (data: ExpenseFormData) => {
                           <Input
                             type="number"
                             step="0.01"
-                            min="0.01"
-                            placeholder="0.00"
+                            placeholder="Enter amount"
                             className="pl-10 h-12 border-2 shadow-sm text-lg"
                             style={{ 
                               backgroundColor: 'rgba(255, 255, 255, 0.8)',
@@ -258,6 +256,39 @@ const onSubmit = async (data: ExpenseFormData) => {
                             {...field}
                           />
                         </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Payer */}
+                <FormField
+                  control={form.control}
+                  name="payerId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-base font-semibold" style={{ color: '#1a2037' }}>
+                        Who Paid?
+                      </FormLabel>
+                      <FormControl>
+                        <select
+                          {...field}
+                          className="w-full h-12 px-3 border-2 rounded-md shadow-sm text-lg"
+                          style={{ 
+                            backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                            backdropFilter: 'blur(4px)',
+                            borderColor: '#e5e7eb',
+                            color: '#1a2037'
+                          }}
+                        >
+                          <option value="">Select who paid</option>
+                          {users.map((user) => (
+                            <option key={user.id} value={user.id.toString()}>
+                              {user.name} ({user.email})
+                            </option>
+                          ))}
+                        </select>
                       </FormControl>
                       <FormMessage />
                     </FormItem>

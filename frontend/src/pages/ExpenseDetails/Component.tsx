@@ -19,11 +19,11 @@ export default function ExpenseDetails() {
             </p>
           </div>
           <Link 
-            to="/transactions" 
+            to="/expenses" 
             className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back to Transactions
+            Back to Expenses
           </Link>
         </div>
       </div>
@@ -40,11 +40,11 @@ export default function ExpenseDetails() {
         {/* Header with back button */}
         <div className="flex items-center gap-4">
           <Link 
-            to="/transactions" 
+            to="/expenses" 
             className="inline-flex items-center gap-2 px-3 py-2 text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back to Transactions
+            Back to Expenses
           </Link>
         </div>
 

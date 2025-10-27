@@ -1,8 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Layout from './pages/Layout';
 import Welcome from './pages/Welcome';
-import List from './pages/List';
-import Add from './pages/Add';
+import Expenses, { loader as expensesLoader } from './pages/Expenses';
 import Transactions, { loader as transactionsLoader } from './pages/Transactions';
 import ExpenseDetails, { loader as expenseDetailLoader } from './pages/ExpenseDetails';
 import NewTransfer, { loader as newTransferLoader } from './pages/NewTransfer';
@@ -18,12 +17,9 @@ const router = createBrowserRouter([
       children: [
         { index: true, Component: Welcome },
         {
-          path: 'list',
-          Component: List,
-        },
-        {
-          path: 'add',
-          Component: Add,
+          path: 'expenses',
+          Component: Expenses,
+          loader: expensesLoader,
         },
         {
           path: 'transactions',

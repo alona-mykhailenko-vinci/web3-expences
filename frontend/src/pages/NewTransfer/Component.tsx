@@ -35,7 +35,7 @@ export default function NewTransfer() {
     defaultValues: {
       sourceId: currentUser?.id || 0,
       targetId: 0,
-      amount: 0,
+      amount: undefined,
     }
   });
 

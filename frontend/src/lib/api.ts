@@ -24,6 +24,8 @@ const sendApiRequest = async (method: string = 'GET', path: string, body?: unkno
 
 const getTransactions: () => Promise<Transaction[]> = () =>
   sendApiRequest('GET', 'transactions') as Promise<Transaction[]>;
+const getExpenses: () => Promise<Expense[]> = () =>
+  sendApiRequest('GET', 'expenses') as Promise<Expense[]>;
 const getUsers: () => Promise<User[]> = () => sendApiRequest('GET', 'users') as Promise<User[]>;
 const getExpenseById: (id: number) => Promise<Expense> = (id) =>
   sendApiRequest('GET', `expenses/${id}`) as Promise<Expense>;
@@ -35,6 +37,7 @@ const createExpense: (payload: NewExpensePayload) => Promise<Expense> = (payload
 export const ApiClient = {
   getUsers,
   getTransactions,
+  getExpenses,
   getExpenseById,
   createTransfer,
   createExpense,

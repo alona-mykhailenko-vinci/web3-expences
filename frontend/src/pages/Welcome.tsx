@@ -38,7 +38,7 @@ export default function Welcome() {
             className="min-w-[240px] h-16 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300" 
             style={{ backgroundColor: '#06141B', color: '#ffffff' }}
           >
-            <NavLink to="/list">
+            <NavLink to="/expenses" style={{ color: '#ffffff' }}>
               View Expenses
             </NavLink>
           </Button>
@@ -54,7 +54,7 @@ export default function Welcome() {
               borderWidth: '2px'
             }}
           >
-            <NavLink to="/add" style={{ color: '#06141B' }}>
+            <NavLink to="/expenses/new" style={{ color: '#06141B' }}>
               Add Expense
             </NavLink>
           </Button>

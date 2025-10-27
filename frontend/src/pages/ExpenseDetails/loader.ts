@@ -4,7 +4,7 @@ import { gql } from "@apollo/client";
 import graphqlClient from "@/lib/graphql-client";
 
 const EXPENSE_QUERY = gql`
-  query ExpenseDetail($id: ID!) {
+  query ExpenseDetail($id: Int!) {
     expense(id: $id) {
       id
       description
@@ -27,7 +27,7 @@ export interface LoaderData {
 export async function loader({ params }: LoaderFunctionArgs) {
   const { data, error } = await graphqlClient.query<{ expense: Expense }>({
     query: EXPENSE_QUERY,
-    variables: { id: params.id },
+    variables: { id: parseInt(params.id!) },
   });
 
   if (!data?.expense || error) {

@@ -52,7 +52,7 @@ export default function NavBar() {
                   backgroundColor: 'transparent'
                 }}
               >
-                <NavLink to="/list">
+                <NavLink to="/expenses">
                   Expense List
                 </NavLink>
               </NavigationMenuLink>
